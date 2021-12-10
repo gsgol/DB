@@ -202,10 +202,10 @@ create function delete_patient_by_FIO(in FIO_ text)
 		end;
 	$$;
 
-create function delete_doctor_chosen(in FIO_ text)
+create function delete_doctor_chosen(in id_ integer)
 	returns void language plpgsql as $$
 		begin
-			delete from "Doctors" where FIO = FIO_;
+			delete from "Doctors" where id = id_;
 		end;
 	$$;
 
