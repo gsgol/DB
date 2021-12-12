@@ -19,14 +19,13 @@ create function create_database()
 		);
 		create table if not exists "Card"(
 		    id integer primary key not null generated always as identity,
-		    total_cost integer not null,
+		    last_update timestamptz default current_timestamp not null
 		    number_of_appointments integer not null,
 		    owner_fio text not null
 
 		);
 		create table if not exists "Appointment"(
 		    id integer primary key not null generated always as identity,
-		    price integer not null,
 		    cabinet_number integer not null,
 		    id_doctor integer not null,
 		    id_patient integer not null
@@ -42,9 +41,9 @@ create function create_database()
 			end;
 		$u$ language plpgsql;
 
-		drop trigger if exists trigger_update on "Department";
+		drop trigger if exists trigger_update on "Card";
 
-		create trigger trigger_update before update on "Department"
+		create trigger trigger_update before update on "Card"
 			for row execute procedure update_time();
 $$;
 
@@ -90,7 +89,7 @@ create function get_cards()
 		begin
 			return (select json_agg(json_build_object(
 				'id', "Card".id,
-				'total_cost', "Card".total_cost,
+				'last_update', "Card".last_update,
 				'number_of_appointments', "Card".number_of_appointments,
 				'owner_fio', "Card".owner_fio
 				)) from "Card");
@@ -102,7 +101,6 @@ create function get_appointments()
 		begin
 			return (select json_agg(json_build_object(
 				'id', "Appointment".id,
-				'price', "Appointment".price,
 				'cabinet_number', "Appointment".cabinet_number,
 				'id_doctor', "Appointment".id_doctor,
 				'id_patient',"Appointment".id_patient
@@ -121,9 +119,9 @@ create function add_to_patients(in FIO text, in age integer, in card_id integer)
 		insert into "Patients"(age, FIO, card_id) values (age, FIO, card_id)
 	$$;
 
-create function add_to_card(in owner_fio text, in age integer, in card_id integer)
+create function add_to_card(in owner_fio text, in age integer)
 	returns void language sql as $$
-		insert into "Card"(owner_fio, number_of_appointments, total_cost) values (owner_fio, number_of_appointments, total_cost)
+		insert into "Card"(owner_fio, number_of_appointments) values (owner_fio, number_of_appointments)
 	$$;
 
 create function add_to_cabinets(in number integer, in specialization text, in fio_of_responsible_person text)
@@ -131,9 +129,9 @@ create function add_to_cabinets(in number integer, in specialization text, in fi
 		insert into "Cabinets"(number, specialization, fio_of_responsible_person) values (number, specialization, fio_of_responsible_person)
 	$$;
 
-create function add_to_appointment(in id_doctor integer, in price integer, in cabinet_number integer, in id_patient integer)
+create function add_to_appointment(in id_doctor integer, in cabinet_number integer, in id_patient integer)
 	returns void language sql as $$
-		insert into "Appointment"(price, cabinet_number, id_doctor, id_patient) values (price, cabinet_number, id_doctor, id_patient)
+		insert into "Appointment"(cabinet_number, id_doctor, id_patient) values (cabinet_number, id_doctor, id_patient)
 	$$;
 
 create function clear_doctors()
@@ -182,7 +180,7 @@ create function find_patient(in query text)
 		end;
 	$$;
 
-create function find_cabinet(in query text)
+create function find_department(in query text)
 	returns json language plpgsql as $$
 		begin
 			return (select json_agg(json_build_object(
@@ -202,10 +200,10 @@ create function delete_patient_by_FIO(in FIO_ text)
 		end;
 	$$;
 
-create function delete_doctor_chosen(in id_ integer)
+create function delete_doctor_chosen(in FIO_ text)
 	returns void language plpgsql as $$
 		begin
-			delete from "Doctors" where id = id_;
+			delete from "Doctors" where FIO = FIO_;
 		end;
 	$$;
 
