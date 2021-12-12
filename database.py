@@ -64,17 +64,17 @@ class Database(object):
     def add_to_doctors(self, FIO, specialization, education):
         self.cursor.callproc("add_to_doctors", (FIO, specialization,education))
 
-    def add_to_patients(self, title, FIO, department):
-        self.cursor.callproc("add_to_patients", (title, FIO, department,))
+    def add_to_patients(self, title, FIO, card_id):
+        self.cursor.callproc("add_to_patients", (title, FIO, card_id))
 
-    def add_to_card(self, title, FIO, department):
-        self.cursor.callproc("add_to_card", (title, FIO, department,))
+    def add_to_card(self, owner_fio, number_of_appointments):
+        self.cursor.callproc("add_to_card", (owner_fio, number_of_appointments))
 
-    def add_to_cabinets(self, title, FIO, department):
-        self.cursor.callproc("add_to_patients", (title, FIO, department,))
+    def add_to_cabinets(self, number, specialization, fio_of_responsible_person):
+        self.cursor.callproc("add_to_patients", (number, specialization, fio_of_responsible_person))
 
-    def add_to_appointment(self, title, FIO, department):
-        self.cursor.callproc("add_to_patients", (title, FIO, department,))
+    def add_to_appointment(self, cabinet_number, id_doctor, id_patient):
+        self.cursor.callproc("add_to_patients", (cabinet_number, id_doctor, id_patient))
 
     def clear_doctors(self):
         self.cursor.callproc("clear_doctors")
