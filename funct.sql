@@ -180,7 +180,7 @@ create function find_patient(in query text)
 		end;
 	$$;
 
-create function find_department(in query text)
+create function find_cabinet(in query text)
 	returns json language plpgsql as $$
 		begin
 			return (select json_agg(json_build_object(
