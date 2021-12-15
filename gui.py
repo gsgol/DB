@@ -196,8 +196,19 @@ Button(text="Очистить список докторов",
        relief="flat").place(
                         x=10,
                         y=320,
-                        width=370,
+                        width=170,
                         height=40)
+
+Button(text="Вывести список докторов",
+       borderwidth=0,
+       highlightthickness=0,
+       command=lambda: db.get_doctors(),
+       relief="flat").place(
+                        x=210,
+                        y=320,
+                        width=170,
+                        height=40)
+
 
 #############пациенты#####################
 Label(text="Пациенты", bg=bg_color).place(x=440, y=55, width=60, height=30)
@@ -247,7 +258,17 @@ Button(text="Очистить список пациентов",
        relief="flat").place(
                         x=440,
                         y=320,
-                        width=380,
+                        width=170,
+                        height=40)
+
+Button(text="Вывести список пациентов",
+       borderwidth=0,
+       highlightthickness=0,
+       command=lambda: db.get_patients(),
+       relief="flat").place(
+                        x=650,
+                        y=320,
+                        width=170,
                         height=40)
 #############кабинеты#####################
 Label(text="Кабинеты", bg=bg_color).place(x=880, y=55, width=60, height=30)
@@ -295,7 +316,17 @@ Button(text="Очистить список кабинетов",
        relief="flat").place(
                         x=880,
                         y=320,
-                        width=380,
+                        width=170,
+                        height=40)
+
+Button(text="Вывести список кабинетов",
+       borderwidth=0,
+       highlightthickness=0,
+       command=lambda: db.get_cabinets(),
+       relief="flat").place(
+                        x=1090,
+                        y=320,
+                        width=170,
                         height=40)
 
 ############карты#####################
@@ -346,7 +377,17 @@ Button(text="Очистить список карт",
        relief="flat").place(
                         x=200,
                         y=650,
-                        width=380,
+                        width=170,
+                        height=40)
+
+Button(text="Вывести список карт",
+       borderwidth=0,
+       highlightthickness=0,
+       command=lambda: db.get_cards(),
+       relief="flat").place(
+                        x=410,
+                        y=650,
+                        width=170,
                         height=40)
 ############приемы#####################
 Label(text="Приемы", bg=bg_color).place(x=650, y=385, width=60, height=30)
@@ -396,8 +437,19 @@ Button(text="Очистить список приемов",
        relief="flat").place(
                         x=650,
                         y=650,
-                        width=380,
+                        width=170,
                         height=40)
+
+Button(text="Выаести список приемов",
+       borderwidth=0,
+       highlightthickness=0,
+       command=lambda: db.get_appointments(),
+       relief="flat").place(
+                        x=860,
+                        y=650,
+                        width=170,
+                        height=40)
+
 
 
 #######################update#######################
