@@ -119,7 +119,7 @@ create function add_to_patients(in FIO text, in age integer, in card_id integer)
 		insert into "Patients"(age, FIO, card_id) values (age, FIO, card_id)
 	$$;
 
-create function add_to_card(in owner_fio text, in age integer)
+create function add_to_card(in owner_fio text, in number_of_appointments integer)
 	returns void language sql as $$
 		insert into "Card"(owner_fio, number_of_appointments) values (owner_fio, number_of_appointments)
 	$$;
@@ -180,7 +180,7 @@ create function find_patient(in query text)
 		end;
 	$$;
 
-create function find_cabinet(in query text)
+create function find_department(in query text)
 	returns json language plpgsql as $$
 		begin
 			return (select json_agg(json_build_object(
@@ -214,12 +214,6 @@ create function delete_patient_chosen(in id_ integer)
 		end;
 	$$;
 
-create function update_doctor_by_id(in new_id text, in id_ text)
-	returns void language plpgsql as $$
-		begin
-			update "Doctors" set id = new_id where id = id_;
-		end;
-	$$;
 
 create function update_cabinet_by_number(in new_specialization text, in number_ integer)
 	returns void language plpgsql as $$
