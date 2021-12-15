@@ -3,7 +3,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
 from database import Database
 
 window = Tk()
-db =Database("template0","newuser","17214747","127.0.0.1","5432")
+db =Database("template0","newuser","17214747","localhost","5432")
 
 window.geometry("1400x800")
 window.configure(bg = "#A18EEB")
