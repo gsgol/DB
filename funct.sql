@@ -19,7 +19,7 @@ create function create_database()
 		);
 		create table if not exists "Card"(
 		    id integer primary key not null generated always as identity,
-		    last_update timestamptz default current_timestamp not null
+		    last_update timestamptz default current_timestamp not null,
 		    number_of_appointments integer not null,
 		    owner_fio text not null
 
