@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from database import Database
 
 window = Tk()
+db =Database('med','newuser','17214747','localhost','5432')
 
-window.geometry("1300x800")
+window.geometry("1400x800")
 window.configure(bg = "#A18EEB")
 window.title("Мед организация")
 bg_color = "#A18EEB"
@@ -32,7 +34,7 @@ search_patient = Button(
     text="Найти пациента",
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print(search_query.get()),
+    command=lambda: db.find_patient_by_FIO(search_query.get()),
     relief="flat")
 
 search_patient.place(
@@ -43,17 +45,59 @@ search_patient.place(
 
 
 search_cabinet = Button(
-    text="Найти кабинет",
+    text="Найти кабинет по фио ответственного",
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print(search_query.get()),
+    command=lambda: db.find_cabinet(search_query.get()),
     relief="flat")
 
 search_cabinet.place(
     x=500,
     y=20,
-    width=140,
+    width=230,
     height=30)
+
+
+search_patient = Button(
+    text="Удалить пациента по фио",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: db.delete_patient_by_FIO(search_query.get()),
+    relief="flat")
+
+search_patient.place(
+    x=750,
+    y=20,
+    width=200,
+    height=30)
+
+
+search_cabinet = Button(
+    text="Удалить доктора по фио",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: db.delete_doctor_chosen(search_query.get()),
+    relief="flat")
+
+search_cabinet.place(
+    x=970,
+    y=20,
+    width=200,
+    height=30)
+
+search_cabinet = Button(
+    text="Удалить пациента",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: db.delete_patient_chosen(search_query.get()),
+    relief="flat")
+
+search_cabinet.place(
+    x=1190,
+    y=20,
+    width=130,
+    height=30)
+
 #######################general buttons#######################
 
 LabelFrame(canvas, text="Общее", bg=bg_color).place(x=1060, y=440, width=160, height=230)
@@ -62,7 +106,7 @@ create_DB = Button(
     text="Создать базу данных",
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("DB created"),
+    command=lambda: db.create_database(),
     relief="flat")
 
 create_DB.place(
@@ -75,7 +119,7 @@ delete_DB = Button(
     text="Удалить базу данных",
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("DB deleted"),
+    command=lambda: db.delete_database(),
     relief="flat")
 delete_DB.place(
     x=1070,
@@ -87,23 +131,11 @@ clear_all = Button(
     text="Очистить все",
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("All clear"),
+    command=lambda: db.clear_all(),
     relief="flat")
 clear_all.place(
     x=1070,
     y=560,
-    width=140,
-    height=40)
-
-delete_selected = Button(
-    text="Удалить выделенное",
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("selected deleted"),
-    relief="flat")
-delete_selected.place(
-    x=1070,
-    y=610,
     width=140,
     height=40)
 
@@ -127,7 +159,7 @@ Entry(textvariable=add_doctor_education).place(x=295,y=80,width=85,height=25)
 Button(text="+",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("adding doctor"),
+       command=lambda: db.add_to_doctors(add_doctor_fio.get(),add_doctor_specialization.get(),add_doctor_education.get()),
        relief="flat").place(x=385,
                             y=80,
                             width=25,
@@ -160,7 +192,7 @@ doctors.place(
 Button(text="Очистить список докторов",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("doctors deleted"),
+       command=lambda: db.clear_doctors(),
        relief="flat").place(
                         x=10,
                         y=320,
@@ -170,7 +202,7 @@ Button(text="Очистить список докторов",
 #############пациенты#####################
 Label(text="Пациенты", bg=bg_color).place(x=440, y=55, width=60, height=30)
 
-add_patient_id, add_patient_fio, add_patient_age, add_patient_card_id = StringVar(),StringVar(),StringVar(),StringVar()
+add_patient_fio, add_patient_age, add_patient_card_id = StringVar(),StringVar(),StringVar()
 
 Entry(textvariable=add_patient_fio).place(x=440,y=80,width=306,height=25)
 Entry(textvariable=add_patient_age).place(x=698,y=80,width=60,height=25)
@@ -179,7 +211,7 @@ Entry(textvariable=add_patient_card_id).place(x=758,y=80,width=60,height=25)
 Button(text="+",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("adding patient"),
+       command=lambda: db.add_to_patients(add_patient_age.get(),add_patient_fio.get(),add_patient_card_id.get()),
        relief="flat").place(x=823,
                             y=80,
                             width=25,
@@ -211,7 +243,7 @@ patients.place(
 Button(text="Очистить список пациентов",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("patients deleted"),
+       command=lambda:db.clear_patients(),
        relief="flat").place(
                         x=440,
                         y=320,
@@ -229,7 +261,7 @@ Entry(textvariable=add_cabinet_fio_resp).place(x=1068,y=80,width=190,height=25)
 Button(text="+",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("adding cabinet"),
+       command=lambda: db.add_to_cabinets(add_cabinet_number,add_cabinet_specialization,add_cabinet_fio_resp),
        relief="flat").place(x=1265,
                             y=80,
                             width=25,
@@ -259,7 +291,7 @@ cabinets.place(
 Button(text="Очистить список кабинетов",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("cabinets deleted"),
+       command=lambda: db.clear_cabinets(),
        relief="flat").place(
                         x=880,
                         y=320,
@@ -278,7 +310,7 @@ Entry(textvariable=add_card_fio).place(x=394,y=410,width=186,height=25)
 Button(text="+",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("adding card"),
+       command=lambda: db.add_to_card(add_card_fio,add_card_num_of_app),
        relief="flat").place(x=585,
                             y=410,
                             width=25,
@@ -310,7 +342,7 @@ card.place(
 Button(text="Очистить список карт",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("cards deleted"),
+       command=lambda: db.clear_cards(),
        relief="flat").place(
                         x=200,
                         y=650,
@@ -329,7 +361,7 @@ Entry(textvariable=add_appointment_id_patient).place(x=944,y=410,width=86,height
 Button(text="+",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("adding card"),
+       command=lambda: db.add_to_appointment(add_appointment_cabinet_number,add_appointment_id_doctor,add_appointment_id_patient),
        relief="flat").place(x=1035,
                             y=410,
                             width=25,
@@ -360,12 +392,74 @@ appointment.place(
 Button(text="Очистить список приемов",
        borderwidth=0,
        highlightthickness=0,
-       command=lambda: print("appointments deleted"),
+       command=lambda: db.clear_appointments(),
        relief="flat").place(
                         x=650,
                         y=650,
                         width=380,
                         height=40)
+
+
+#######################update#######################
+
+update_query_1,update_query_2 = StringVar(),StringVar()
+
+
+update_entry = Entry(textvariable=update_query_1)
+update_entry.place(
+    x=20,
+    y=750,
+    width=250,
+    height=30)
+
+
+update_entry = Entry(textvariable=update_query_2)
+update_entry.place(
+    x=290,
+    y=750,
+    width=100,
+    height=30)
+
+update_cabinet = Button(
+    text="Изменить специализацию кабинета",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda:db.update_cabinet_by_number(update_query_1.get(),update_query_2.get()),
+    relief="flat")
+update_cabinet.place(
+    x=410,
+    y=750,
+    width=200,
+    height=40)
+
+
+update_patient =Button(
+    text="Изменить фио пациента",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: db.update_patient_by_FIO(update_query_1.get(), update_query_2.get()),
+    relief="flat")
+
+update_patient.place(
+    x=630,
+    y=750,
+    width=140,
+    height=40)
+
+
+update_patient_age=Button(
+    text="Изменить возраст пациента",
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: db.update_patient_by_age(update_query_1.get(), update_query_2.get()),
+    relief="flat")
+
+update_patient_age.place(
+    x=790,
+    y=750,
+    width=160,
+    height=40)
+
 
 window.resizable(False, False)
 window.mainloop()
